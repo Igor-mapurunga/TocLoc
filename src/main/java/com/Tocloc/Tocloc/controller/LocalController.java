@@ -33,6 +33,7 @@ public class LocalController {
         return new ResponseEntity<>(local, HttpStatus.OK);
     }
 
+    // Criar local para possivel locação
     @PostMapping("/{proprietarioId}")
     public ResponseEntity<Local> createLocal(@PathVariable Long proprietarioId, @RequestBody Local local) {
         User proprietario = userService.findById(proprietarioId);
@@ -42,7 +43,22 @@ public class LocalController {
         Local novoLocal = localService.save(local);
         return new ResponseEntity<>(novoLocal, HttpStatus.CREATED);
     }
+    // Endpoint para realizar a locação de uma quadra por um usuario especifico
+    @PostMapping("/{localId}/locar/{usuarioId}")
+    public ResponseEntity<Local> realizarLocacao(@PathVariable Long localId, @PathVariable Long usuarioId) {
+        Local local = localService.findById(localId);
+        User usuario = userService.findById(usuarioId);
 
+        if (!"usuario".equalsIgnoreCase(usuario.getTypeOfUser())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        if (local.getUsuarioLocador() != null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        local.setUsuarioLocador(usuario);
+        Local localLocado = localService.save(local);
+        return new ResponseEntity<>(localLocado, HttpStatus.OK);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Local> updateLocal(@PathVariable Long id, @RequestBody Local localDetails) {
         Local updatedLocal = localService.update(id, localDetails);
