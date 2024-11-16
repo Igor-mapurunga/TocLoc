@@ -1,7 +1,8 @@
 package com.Tocloc.Tocloc.controller;
 
 import com.Tocloc.Tocloc.entities.Local;
-import com.Tocloc.Tocloc.entities.User;
+import com.Tocloc.Tocloc.entities.User.User;
+import com.Tocloc.Tocloc.entities.User.UserRoles;
 import com.Tocloc.Tocloc.service.LocalService;
 import com.Tocloc.Tocloc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ public class LocalController {
         return new ResponseEntity<>(local, HttpStatus.OK);
     }
 
-    // Criar local para possivel locação
     @PostMapping("/{proprietarioId}")
     public ResponseEntity<Local> createLocal(@PathVariable Long proprietarioId, @RequestBody Local local) {
         User proprietario = userService.findById(proprietarioId);
@@ -49,7 +49,7 @@ public class LocalController {
         Local local = localService.findById(localId);
         User usuario = userService.findById(usuarioId);
 
-        if (!"usuario".equalsIgnoreCase(usuario.getTypeOfUser())) {
+        if (!UserRoles.USUARIO.equals(usuario.getTypeOfUser())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         if (local.getUsuarioLocador() != null) {
