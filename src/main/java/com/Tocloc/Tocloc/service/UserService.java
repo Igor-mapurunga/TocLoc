@@ -14,4 +14,5 @@ public interface UserService {
     User update(Long userId, User userDetails);
     UserDetails loadUserByUsername(String email);
     User findByEmail(String email);
+    Long getCurrentUserId();
 }

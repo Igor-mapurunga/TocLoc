@@ -3,6 +3,8 @@ package com.Tocloc.Tocloc.service;
 import com.Tocloc.Tocloc.dao.UserRepository;
 import com.Tocloc.Tocloc.entities.User.User;
 import com.Tocloc.Tocloc.exceptions.UserNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,4 +56,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException("Usuário com email " + email + " não foi encontrado"));
     }
 
+    public Long getCurrentUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()){
+            Object principal = authentication.getPrincipal();
+            if(principal instanceof UserDetails){
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                return findUserIdByUsername(username);
+            } else if (principal instanceof String) {
+                return findUserIdByUsername((String) principal);
+            }
+        }
+        return null;
+    }
+
+    public Long findUserIdByUsername(String username) {
+        User user = findByEmail(username);
+        if(user != null){
+            return user.getId();
+        }
+        return null;
+    }
 }

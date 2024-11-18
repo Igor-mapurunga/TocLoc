@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.net.http.HttpHeaders;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ public class JwtUtil {
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
+
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
@@ -43,6 +46,7 @@ public class JwtUtil {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

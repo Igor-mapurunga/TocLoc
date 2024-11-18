@@ -43,6 +43,7 @@ public class LocalController {
         Local novoLocal = localService.save(local);
         return new ResponseEntity<>(novoLocal, HttpStatus.CREATED);
     }
+
     // Endpoint para realizar a locação de uma quadra por um usuario especifico
     @PostMapping("/{localId}/locar/{usuarioId}")
     public ResponseEntity<Local> realizarLocacao(@PathVariable Long localId, @PathVariable Long usuarioId) {
@@ -59,6 +60,7 @@ public class LocalController {
         Local localLocado = localService.save(local);
         return new ResponseEntity<>(localLocado, HttpStatus.OK);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Local> updateLocal(@PathVariable Long id, @RequestBody Local localDetails) {
         Local updatedLocal = localService.update(id, localDetails);

@@ -3,6 +3,7 @@ package com.Tocloc.Tocloc.controller;
 import com.Tocloc.Tocloc.Security.Token.JwtUtil;
 import com.Tocloc.Tocloc.entities.User.User;
 import com.Tocloc.Tocloc.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,15 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping({"/current"})
+    public ResponseEntity<Long> getCurrentUserId(){
+        Long userId = userService.getCurrentUserId();
+        if(userId == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

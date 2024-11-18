@@ -30,6 +30,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/locais/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Permitir login e criação de token
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() // Permitir criação de usuários sem autenticação
                         .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated() // Permitir DELETE apenas para usuários autenticados
