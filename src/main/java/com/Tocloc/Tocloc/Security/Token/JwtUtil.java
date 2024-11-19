@@ -27,8 +27,6 @@ public class JwtUtil {
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
-
-
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
@@ -46,7 +44,6 @@ public class JwtUtil {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

@@ -22,16 +22,13 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
-
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
-
         return new AuthResponse(jwt);
     }
 }
