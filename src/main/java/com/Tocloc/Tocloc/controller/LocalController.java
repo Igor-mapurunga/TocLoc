@@ -70,6 +70,13 @@ public class LocalController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("/{localId}/reservas")
+    public ResponseEntity<List<Reserva>> obterReservas(@PathVariable Long localId){
+        List<Reserva> reservas = reservaService.findReservationByLocal(localId);
+        return new ResponseEntity<>(reservas, HttpStatus.OK);
+    }
+
     @GetMapping("/{localId}/reservas/{reservaId}")
     public ResponseEntity<Reserva> obterDetalhesReserva(@PathVariable Long localId, @PathVariable Long reservaId) {
         Reserva reserva = reservaService.findById(reservaId);

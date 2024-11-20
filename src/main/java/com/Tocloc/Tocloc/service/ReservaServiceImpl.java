@@ -25,6 +25,14 @@ public class ReservaServiceImpl implements ReservaService {
                 .orElseThrow(() -> new ReservaNotFoundException("Reserva não encontrada com ID: " + id));
     }
     @Override
+    public List<Reserva> findReservationByUser(Long userId){
+        return reservaRepository.findByUsuarioId(userId);
+    }
+    @Override
+    public List<Reserva> findReservationByLocal(Long localId){
+        return reservaRepository.findByLocalId(localId);
+    }
+    @Override
     public Reserva save(Reserva reserva) {
         Local local = localService.findById(reserva.getLocal().getId());
         reserva.setLocal(local);
