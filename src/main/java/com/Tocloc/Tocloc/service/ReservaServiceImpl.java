@@ -6,6 +6,8 @@ import com.Tocloc.Tocloc.entities.User.User;
 import com.Tocloc.Tocloc.exceptions.ReservaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class ReservaServiceImpl implements ReservaService {
@@ -46,6 +48,21 @@ public class ReservaServiceImpl implements ReservaService {
             }
         }
         return reservaRepository.save(reserva);
+    }
+    public void realizarCheckin(Long reservaId) {
+        Reserva reserva = findById(reservaId);
+        LocalDateTime agora = LocalDateTime.now();
+
+        if (reserva.getDataHoraInicio().minusMinutes(15).isAfter(agora)) {
+            throw new IllegalStateException("Check-in só pode ser feito 15 minutos antes do horário de início.");
+        }
+
+        if (reserva.isCheckinConfirmado()) {
+            throw new IllegalStateException("O check-in já foi realizado para esta reserva.");
+        }
+
+        reserva.setCheckinConfirmado(true);
+        reservaRepository.save(reserva);
     }
     @Override
     public void deleteById(Long id) {

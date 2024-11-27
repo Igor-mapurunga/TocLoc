@@ -85,6 +85,19 @@ public class LocalController {
         }
         return new ResponseEntity<>(reserva, HttpStatus.OK);
     }
+    @PatchMapping("/{localId}/reservas/{reservaId}/checkin")
+    public ResponseEntity<Void> realizarCheckin(@PathVariable Long localId, @PathVariable Long reservaId) {
+        Reserva reserva = reservaService.findById(reservaId);
+        if (!reserva.getLocal().getId().equals(localId)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            reservaService.realizarCheckin(reservaId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
     @DeleteMapping("/{localId}/reservas/{reservaId}")
     public ResponseEntity<Void> cancelarReserva(@PathVariable Long localId, @PathVariable Long reservaId) {
         Reserva reserva = reservaService.findById(reservaId);

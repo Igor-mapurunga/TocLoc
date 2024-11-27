@@ -21,6 +21,14 @@ public class Reserva {
     private LocalDateTime dataHoraInicio;
     @Column(name = "data_hora_fim", nullable = false)
     private LocalDateTime dataHoraFim;
+    @Column(name = "checkin_confirmado", nullable = false)
+    private boolean checkinConfirmado = false;
+    public boolean isCheckinConfirmado() {
+        return checkinConfirmado;
+    }
+    public void setCheckinConfirmado(boolean checkinConfirmado) {
+        this.checkinConfirmado = checkinConfirmado;
+    }
     public Long getId() {
         return id;
     }

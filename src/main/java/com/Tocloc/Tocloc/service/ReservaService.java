@@ -12,4 +12,5 @@ public interface ReservaService {
     Reserva findById(Long id);
     Reserva save(Reserva reserva);
     void deleteById(Long id);
+    void realizarCheckin(Long reservaId);
 }
